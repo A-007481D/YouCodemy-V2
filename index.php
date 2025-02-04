@@ -6,7 +6,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+use App\controllers\HomeController;
 use routes\Router;
 
 require_once './utils.php';
 
+$route = new Router();
+
+$route->get('/home', 'HomeController', 'index');
+
+$route->resolve($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
