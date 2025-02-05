@@ -26,26 +26,26 @@ class Router
     }
 
 
-    public function resolve($requestUri, $requestMethod): void
+    public static function resolve($requestUri, $requestMethod): void
     {
         $path = parse_url($requestUri, PHP_URL_PATH);
         $method = strtolower($requestMethod);
 
         if (isset(self::$routes[$method][$path])) {
-            $this->callAction(self::$routes[$method][$path]);
+            self::callAction(self::$routes[$method][$path]);
         }
         foreach (self::$routes[$method] as $route => $handler) {
-            $pattern = $this->convertToRegex($route);
+            $pattern = self::convertToRegex($route);
             if (preg_match($pattern, $path, $matches)) {
                 $params = array_slice($matches, 1);
-                $this->callAction($handler, $params);
+                self::callAction($handler, $params);
                 return;
             }
         }
-        $this->get404();
+        self::get404();
     }
 
-    private function callAction(array $handler, array $params = []): void
+    private static function callAction(array $handler, array $params = []): void
     {
         [$controller, $action] = $handler;
         $controllerPath = "app/controllers/{$controller}.php";
@@ -62,17 +62,17 @@ class Router
                 }
             }
         }
-        $this->get404();
+        self::get404();
     }
 
 
-    private function convertToRegex(string $route): string
+    private static function convertToRegex(string $route): string
     {
         return '#^' . preg_replace('/\{(\w+)\}/', '(\d+)', $route) . '$#';
     }
 
 
-    public function get404(): void
+    public static function get404(): void
     {
         require_once 'app/views/404.php';
     }

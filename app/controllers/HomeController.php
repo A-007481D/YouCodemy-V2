@@ -8,5 +8,4 @@ class HomeController {
         require_once "app/views/home.php";
     }
 
-
 }

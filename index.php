@@ -11,8 +11,6 @@ use routes\Router;
 
 require_once './utils.php';
 
-$route = new Router();
-
-$route->get('/home', 'HomeController', 'index');
-
-$route->resolve($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
+Router::get('/home', 'HomeController', 'index');
+Router::get('/', 'HomeController', 'index');
+Router::resolve($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
